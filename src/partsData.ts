@@ -17,10 +17,10 @@ import waterWomanParts from "./parts-jsons/water-woman-parts.json" with {
   type: "json"
 };
 
-type PartType = "Stone" | "Fire" | "Water";
-type GenderType = "Man" | "Woman";
+export type PartType = "Stone" | "Fire" | "Water";
+export type GenderType = "Man" | "Woman";
 
-interface ImageInfo {
+export interface ImageInfo {
   path: string;
   order: number;
 }
@@ -30,19 +30,19 @@ interface PartCondition {
   values: string[];
 }
 
-interface PartItem {
+export interface PartItem {
   name: string;
   images?: ImageInfo[];
   percent?: number;
   condition?: PartCondition;
 }
 
-interface PartCategory {
+export interface PartCategory {
   name: string;
   parts: PartItem[];
 }
 
-const partData: Record<PartType, Record<GenderType, PartCategory[]>> = {
+const partsData: Record<PartType, Record<GenderType, PartCategory[]>> = {
   Stone: {
     Man: stoneManParts,
     Woman: stoneWomanParts,
@@ -57,4 +57,4 @@ const partData: Record<PartType, Record<GenderType, PartCategory[]>> = {
   },
 } as const;
 
-export default partData;
+export default partsData;
