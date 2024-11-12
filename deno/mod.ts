@@ -1,1 +1,1 @@
-export { default as PartSelector } from "../lib/PartSelector.d.ts";
+export type { default as PartSelector } from "../lib/PartSelector.d.ts";
