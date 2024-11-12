@@ -2,33 +2,6 @@ import GodMetadata, { ElementType, GenderType } from "./GodMetadata.js";
 import partsData, { Part, Trait } from "./partsData.js";
 
 class PartSelector {
-  public getAvailableTraits(metadata: GodMetadata): Trait[] {
-    return this.getTraits(metadata.type, metadata.gender);
-  }
-
-  public getAvailablePartsForTrait(
-    trait: Trait,
-    metadata: GodMetadata,
-  ): Part[] {
-    return trait.parts.filter((part) => this.isPartAvailable(part, metadata));
-  }
-
-  public getSelectedParts(metadata: GodMetadata): { [trait: string]: Part } {
-    const traits = this.getTraits(metadata.type, metadata.gender);
-    const selectedParts: { [trait: string]: Part } = {};
-
-    for (const trait of traits) {
-      const availableParts = this.getAvailablePartsForTrait(trait, metadata);
-      const selectedPartName = metadata.parts[trait.name];
-      const selectedPart = availableParts.find((part) =>
-        part.name === selectedPartName
-      );
-      if (selectedPart) selectedParts[trait.name] = selectedPart;
-    }
-
-    return selectedParts;
-  }
-
   public getTraits(type: ElementType, gender: GenderType): Trait[] {
     return partsData[type][gender];
   }
@@ -53,6 +26,29 @@ class PartSelector {
     }
 
     return part.condition.values.includes(traitValue);
+  }
+
+  public getAvailablePartsForTrait(
+    trait: Trait,
+    metadata: GodMetadata,
+  ): Part[] {
+    return trait.parts.filter((part) => this.isPartAvailable(part, metadata));
+  }
+
+  public getSelectedParts(metadata: GodMetadata): { [trait: string]: Part } {
+    const traits = this.getTraits(metadata.type, metadata.gender);
+    const selectedParts: { [trait: string]: Part } = {};
+
+    for (const trait of traits) {
+      const availableParts = this.getAvailablePartsForTrait(trait, metadata);
+      const selectedPartName = metadata.parts[trait.name];
+      const selectedPart = availableParts.find((part) =>
+        part.name === selectedPartName
+      );
+      if (selectedPart) selectedParts[trait.name] = selectedPart;
+    }
+
+    return selectedParts;
   }
 
   public getDefaultParts(type: ElementType, gender: GenderType) {

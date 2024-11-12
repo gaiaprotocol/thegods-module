@@ -1,13 +1,12 @@
 import GodMetadata, { ElementType, GenderType } from "./GodMetadata.js";
 import { Part, Trait } from "./partsData.js";
 declare class PartSelector {
-    getAvailableTraits(metadata: GodMetadata): Trait[];
+    getTraits(type: ElementType, gender: GenderType): Trait[];
+    private isPartAvailable;
     getAvailablePartsForTrait(trait: Trait, metadata: GodMetadata): Part[];
     getSelectedParts(metadata: GodMetadata): {
         [trait: string]: Part;
     };
-    getTraits(type: ElementType, gender: GenderType): Trait[];
-    private isPartAvailable;
     getDefaultParts(type: ElementType, gender: GenderType): {
         [trait: string]: string;
     };
