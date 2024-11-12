@@ -4,5 +4,5 @@ export type GenderType = "Man" | "Woman";
 export default interface GodMetadata {
   type: ElementType;
   gender: GenderType;
-  parts: Record<string, string>;
+  parts: { [trait: string]: string };
 }

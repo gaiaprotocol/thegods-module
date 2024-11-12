@@ -1,11 +1,16 @@
-import GodMetadata from "./GodMetadata.js";
+import GodMetadata, { ElementType, GenderType } from "./GodMetadata.js";
+import { Part, Trait } from "./partsData.js";
 declare class PartSelector {
-    getAvailableTraits(metadata: GodMetadata): any[];
-    getAvailablePartsForTrait(trait: any, metadata: GodMetadata): any[];
-    getSelectedParts(metadata: GodMetadata): any[];
+    getAvailableTraits(metadata: GodMetadata): Trait[];
+    getAvailablePartsForTrait(trait: Trait, metadata: GodMetadata): Part[];
+    getSelectedParts(metadata: GodMetadata): {
+        [trait: string]: Part;
+    };
     private getPartsDataForMetadata;
-    private isTraitAvailable;
     private isPartAvailable;
+    getDefaultParts(type: ElementType, gender: GenderType): {
+        [trait: string]: string;
+    };
 }
 declare const _default: PartSelector;
 export default _default;

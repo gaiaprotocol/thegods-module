@@ -1,58 +1,72 @@
-import GodMetadata from "./GodMetadata.js";
-import partsData from "./partsData.js";
+import GodMetadata, { ElementType, GenderType } from "./GodMetadata.js";
+import partsData, { Part, Trait } from "./partsData.js";
 
 class PartSelector {
-  public getAvailableTraits(metadata: GodMetadata): any[] {
-    const parts = this.getPartsDataForMetadata(metadata);
-    return parts.filter((trait) => this.isTraitAvailable(trait, metadata));
+  public getAvailableTraits(metadata: GodMetadata): Trait[] {
+    return this.getPartsDataForMetadata(metadata);
   }
 
-  public getAvailablePartsForTrait(trait: any, metadata: GodMetadata): any[] {
-    return trait.parts.filter((part: any) =>
-      this.isPartAvailable(part, metadata)
-    );
+  public getAvailablePartsForTrait(
+    trait: Trait,
+    metadata: GodMetadata,
+  ): Part[] {
+    return trait.parts.filter((part) => this.isPartAvailable(part, metadata));
   }
 
-  public getSelectedParts(metadata: GodMetadata): any[] {
+  public getSelectedParts(metadata: GodMetadata): { [trait: string]: Part } {
     const parts = this.getPartsDataForMetadata(metadata);
-    const selectedParts: any[] = [];
+    const selectedParts: { [trait: string]: Part } = {};
 
     for (const trait of parts) {
-      if (this.isTraitAvailable(trait, metadata)) {
-        const selectedPartName = metadata.parts[trait.name];
-        const selectedPart = trait.parts.find(
-          (part: any) =>
-            part.name === selectedPartName &&
-            this.isPartAvailable(part, metadata),
-        );
-        if (selectedPart) {
-          selectedParts.push({ trait: trait.name, part: selectedPart });
-        }
-      }
+      const availableParts = this.getAvailablePartsForTrait(trait, metadata);
+      const selectedPartName = metadata.parts[trait.name];
+      const selectedPart = availableParts.find((part) =>
+        part.name === selectedPartName
+      );
+      if (selectedPart) selectedParts[trait.name] = selectedPart;
     }
 
     return selectedParts;
   }
 
-  private getPartsDataForMetadata(metadata: GodMetadata): any[] {
+  private getPartsDataForMetadata(metadata: GodMetadata): Trait[] {
     const { type, gender } = metadata;
     return partsData[type][gender];
   }
 
-  private isTraitAvailable(trait: any, metadata: GodMetadata): boolean {
-    if (!trait.condition) {
-      return true;
-    }
-    const traitValue = metadata.parts[trait.condition.trait];
-    return trait.condition.values.includes(traitValue);
-  }
-
-  private isPartAvailable(part: any, metadata: GodMetadata): boolean {
+  private isPartAvailable(part: Part, metadata: GodMetadata): boolean {
     if (!part.condition) {
       return true;
     }
-    const traitValue = metadata.parts[part.condition.trait];
+
+    let traitValue: string | undefined;
+
+    if (part.condition.trait === "Type") {
+      traitValue = metadata.type;
+    } else if (part.condition.trait === "Gender") {
+      traitValue = metadata.gender;
+    } else {
+      traitValue = metadata.parts[part.condition.trait];
+    }
+
+    if (!traitValue) {
+      return false;
+    }
+
     return part.condition.values.includes(traitValue);
+  }
+
+  public getDefaultParts(type: ElementType, gender: GenderType) {
+    const traits = partsData[type][gender];
+    const defaultParts: { [trait: string]: string } = {};
+
+    for (const trait of traits) {
+      if (trait.parts.length > 0) {
+        defaultParts[trait.name] = trait.parts[0].name;
+      }
+    }
+
+    return defaultParts;
   }
 }
 
