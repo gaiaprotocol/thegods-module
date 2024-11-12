@@ -1,10 +1,5 @@
-import partsData, {
-  GenderType,
-  ImageInfo,
-  PartCategory,
-  PartItem,
-  PartType,
-} from "./partsData.ts";
+import { GenderType, PartType } from "./GodMetadata.js";
+import partsData, { ImageInfo, PartCategory, PartItem } from "./partsData.js";
 
 interface MetadataParts {
   [key: string]: string;
@@ -18,15 +13,15 @@ interface ImagePart {
 }
 
 class PartsManager {
-  private getParts(type: PartType, gender: GenderType): PartCategory[] {
+  public getPartCategory(type: PartType, gender: GenderType): PartCategory[] {
     return partsData[type][gender];
   }
 
   public getDefaultParts(type: PartType, gender: GenderType): MetadataParts {
-    const parts = this.getParts(type, gender);
+    const category = this.getPartCategory(type, gender);
     const defaultParts: MetadataParts = {};
 
-    parts.forEach((trait) => {
+    category.forEach((trait) => {
       if (trait.parts.length > 0) {
         defaultParts[trait.name] = trait.parts[0].name;
       }
@@ -48,10 +43,10 @@ class PartsManager {
     gender: GenderType,
     currentParts: MetadataParts,
   ): ImagePart[] {
-    const parts = this.getParts(type, gender);
+    const category = this.getPartCategory(type, gender);
     const imageParts: ImagePart[] = [];
 
-    parts.forEach((trait, traitId) => {
+    category.forEach((trait, traitId) => {
       trait.parts.forEach((part, partId) => {
         if (
           this.isPartAvailable(part, currentParts) &&
@@ -80,18 +75,34 @@ class PartsManager {
   ): boolean {
     const availableParts = this.getAvailableParts(type, gender, parts);
     const requiredPartNames = new Set(
-      this.getParts(type, gender)
+      this.getPartCategory(type, gender)
         .filter((trait) => !trait.parts.some((part) => part.name === "None"))
         .map((trait) => trait.name),
     );
 
     const selectedPartNames = new Set(
       availableParts.map((part) =>
-        this.getParts(type, gender)[part.traitId].name
+        this.getPartCategory(type, gender)[part.traitId].name
       ),
     );
 
     return [...requiredPartNames].every((name) => selectedPartNames.has(name));
+  }
+
+  public getAvailablePartsForTrait(
+    type: PartType,
+    gender: GenderType,
+    traitName: string,
+    currentParts: MetadataParts,
+  ): PartItem[] {
+    const category = this.getPartCategory(type, gender);
+    const trait = category.find((t) => t.name === traitName);
+
+    if (!trait) return [];
+
+    return trait.parts.filter((part) =>
+      this.isPartAvailable(part, currentParts)
+    );
   }
 }
 

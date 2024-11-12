@@ -1,24 +1,22 @@
+import { GenderType, PartType } from "./GodMetadata.js";
 import fireManParts from "./parts-jsons/fire-man-parts.json" with {
-  type: "json"
+  type: "json",
 };
 import fireWomanParts from "./parts-jsons/fire-woman-parts.json" with {
-  type: "json"
+  type: "json",
 };
 import stoneManParts from "./parts-jsons/stone-man-parts.json" with {
-  type: "json"
+  type: "json",
 };
 import stoneWomanParts from "./parts-jsons/stone-woman-parts.json" with {
-  type: "json"
+  type: "json",
 };
 import waterManParts from "./parts-jsons/water-man-parts.json" with {
-  type: "json"
+  type: "json",
 };
 import waterWomanParts from "./parts-jsons/water-woman-parts.json" with {
-  type: "json"
+  type: "json",
 };
-
-export type PartType = "Stone" | "Fire" | "Water";
-export type GenderType = "Man" | "Woman";
 
 export interface ImageInfo {
   path: string;
