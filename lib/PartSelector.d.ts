@@ -10,6 +10,7 @@ declare class PartSelector {
     getDefaultParts(type: ElementType, gender: GenderType): {
         [trait: string]: string;
     };
+    validateMetadata(metadata: GodMetadata): string[];
 }
 declare const _default: PartSelector;
 export default _default;

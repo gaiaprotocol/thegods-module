@@ -63,6 +63,40 @@ class PartSelector {
 
     return defaultParts;
   }
+
+  public validateMetadata(metadata: GodMetadata): string[] {
+    const errors: string[] = [];
+    const traits = this.getTraits(metadata.type, metadata.gender);
+
+    for (const trait of traits) {
+      const selectedPartName = metadata.parts[trait.name];
+
+      if (!selectedPartName) {
+        // Missing part for this trait
+        errors.push(`Missing part for trait "${trait.name}".`);
+        continue;
+      }
+
+      const part = trait.parts.find((p) => p.name === selectedPartName);
+
+      if (!part) {
+        // Selected part does not exist in trait's parts
+        errors.push(
+          `Invalid part "${selectedPartName}" selected for trait "${trait.name}".`,
+        );
+        continue;
+      }
+
+      if (!this.isPartAvailable(part, metadata)) {
+        // Part's condition not satisfied
+        errors.push(
+          `Part "${part.name}" for trait "${trait.name}" does not meet its condition.`,
+        );
+      }
+    }
+
+    return errors;
+  }
 }
 
 export default new PartSelector();
