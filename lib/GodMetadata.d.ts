@@ -1,7 +1,7 @@
-export type PartType = "Stone" | "Fire" | "Water";
+export type ElementType = "Stone" | "Fire" | "Water";
 export type GenderType = "Man" | "Woman";
 export default interface GodMetadata {
-    type: PartType;
+    type: ElementType;
     gender: GenderType;
     parts: Record<string, string>;
 }

@@ -1,4 +1,4 @@
-import { ElementType, GenderType } from "./GodMetadata.js";
+import { GenderType, PartType } from "./GodMetadata.js";
 import fireManParts from "./parts-jsons/fire-man-parts.json" with {
   type: "json",
 };
@@ -18,7 +18,7 @@ import waterWomanParts from "./parts-jsons/water-woman-parts.json" with {
   type: "json",
 };
 
-interface ImageInfo {
+export interface ImageInfo {
   path: string;
   order: number;
 }
@@ -28,19 +28,19 @@ interface PartCondition {
   values: string[];
 }
 
-interface PartData {
+export interface PartItem {
   name: string;
   images?: ImageInfo[];
   percent?: number;
   condition?: PartCondition;
 }
 
-interface PartCategory {
+export interface PartCategory {
   name: string;
-  parts: PartData[];
+  parts: PartItem[];
 }
 
-const partsData: Record<ElementType, Record<GenderType, PartCategory[]>> = {
+const partsData: Record<PartType, Record<GenderType, PartCategory[]>> = {
   Stone: {
     Man: stoneManParts,
     Woman: stoneWomanParts,

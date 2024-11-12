@@ -1,5 +1,5 @@
-import { GenderType, PartType } from "./GodMetadata.js";
-export interface ImageInfo {
+import { ElementType, GenderType } from "./GodMetadata.js";
+interface ImageInfo {
     path: string;
     order: number;
 }
@@ -7,16 +7,16 @@ interface PartCondition {
     trait: string;
     values: string[];
 }
-export interface PartItem {
+interface PartData {
     name: string;
     images?: ImageInfo[];
     percent?: number;
     condition?: PartCondition;
 }
-export interface PartCategory {
+interface PartCategory {
     name: string;
-    parts: PartItem[];
+    parts: PartData[];
 }
-declare const partsData: Record<PartType, Record<GenderType, PartCategory[]>>;
+declare const partsData: Record<ElementType, Record<GenderType, PartCategory[]>>;
 export default partsData;
 //# sourceMappingURL=partsData.d.ts.map
