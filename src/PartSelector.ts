@@ -3,7 +3,7 @@ import partsData, { Part, Trait } from "./partsData.js";
 
 class PartSelector {
   public getAvailableTraits(metadata: GodMetadata): Trait[] {
-    return this.getPartsDataForMetadata(metadata);
+    return this.getTraits(metadata.type, metadata.gender);
   }
 
   public getAvailablePartsForTrait(
@@ -14,10 +14,10 @@ class PartSelector {
   }
 
   public getSelectedParts(metadata: GodMetadata): { [trait: string]: Part } {
-    const parts = this.getPartsDataForMetadata(metadata);
+    const traits = this.getTraits(metadata.type, metadata.gender);
     const selectedParts: { [trait: string]: Part } = {};
 
-    for (const trait of parts) {
+    for (const trait of traits) {
       const availableParts = this.getAvailablePartsForTrait(trait, metadata);
       const selectedPartName = metadata.parts[trait.name];
       const selectedPart = availableParts.find((part) =>
@@ -29,8 +29,7 @@ class PartSelector {
     return selectedParts;
   }
 
-  private getPartsDataForMetadata(metadata: GodMetadata): Trait[] {
-    const { type, gender } = metadata;
+  public getTraits(type: ElementType, gender: GenderType): Trait[] {
     return partsData[type][gender];
   }
 
@@ -57,7 +56,7 @@ class PartSelector {
   }
 
   public getDefaultParts(type: ElementType, gender: GenderType) {
-    const traits = partsData[type][gender];
+    const traits = this.getTraits(type, gender);
     const defaultParts: { [trait: string]: string } = {};
 
     for (const trait of traits) {

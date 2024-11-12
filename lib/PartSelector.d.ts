@@ -6,7 +6,7 @@ declare class PartSelector {
     getSelectedParts(metadata: GodMetadata): {
         [trait: string]: Part;
     };
-    private getPartsDataForMetadata;
+    getTraits(type: ElementType, gender: GenderType): Trait[];
     private isPartAvailable;
     getDefaultParts(type: ElementType, gender: GenderType): {
         [trait: string]: string;
